@@ -1,0 +1,107 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/components/constants.dart';
+import 'package:shop_app/components/custom_button.dart';
+import 'package:shop_app/components/custom_text_form_field.dart';
+import 'package:shop_app/cubit/home/home_cubit.dart';
+import 'package:shop_app/helper/cached_helper.dart';
+import 'package:shop_app/models/login_model.dart';
+import 'package:shop_app/pages/login_page.dart';
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+
+    return BlocConsumer<HomeCubit, HomeStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ConditionalBuilder(
+          fallback: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          condition: HomeCubit.get(context).userModel != null,
+          builder: (context) {
+            Data model = HomeCubit.get(context).userModel!.data!;
+            nameController.text = model.name!;
+            emailController.text = model.email!;
+            phoneController.text = model.phone!;
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  if (state is UpdateProfileLoadingState)
+                    const LinearProgressIndicator(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  customTextFormField(
+                    prefixIcon: const Icon(Icons.person),
+                    textInputType: TextInputType.name,
+                    hintText: 'Name',
+                    controller: nameController,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  customTextFormField(
+                    prefixIcon: const Icon(Icons.email),
+                    textInputType: TextInputType.emailAddress,
+                    hintText: 'Email',
+                    controller: emailController,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  customTextFormField(
+                    prefixIcon: const Icon(Icons.phone),
+                    textInputType: TextInputType.phone,
+                    hintText: 'Phone',
+                    controller: phoneController,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  customButton(
+                    onTap: () {
+                      HomeCubit.get(context).updateUserProfile(
+                        email: emailController.text,
+                        name: nameController.text,
+                        phone: phoneController.text,
+                      );
+                    },
+                    textbutton: 'UPDATE',
+                    color: Colors.teal,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  customButton(
+                    onTap: () {
+                      CachedHelper.removeData(key: kOnLogging).then((value) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                          (route) => false,
+                        );
+                      });
+                    },
+                    textbutton: 'LOGOUT',
+                    color: Colors.teal,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
