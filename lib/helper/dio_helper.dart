@@ -14,7 +14,7 @@ class DioHelper {
 
   static Future<Response> getData({
     required String url,
-    String lang = 'en',
+    String lang = 'ar',
     String? token,
     Map<String, dynamic>? query,
     Map<String, dynamic>? data,
@@ -38,7 +38,7 @@ class DioHelper {
 
   static Future<Response> postData({
     required String url,
-    String lang = 'en',
+    String lang = 'ar',
     String? token,
     Map<String, dynamic>? query,
     required Map<String, dynamic> data,
@@ -61,7 +61,7 @@ class DioHelper {
   }
    static Future<Response> putData({
     required String url,
-    String lang = 'en',
+    String lang = 'ar',
     String? token,
     Map<String, dynamic>? query,
     required Map<String, dynamic> data,

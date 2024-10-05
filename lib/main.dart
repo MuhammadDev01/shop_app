@@ -44,9 +44,9 @@ class MyApp extends StatelessWidget {
   final Widget currentPage;
 
   const MyApp({
-    Key? key,
+    super.key,
     required this.currentPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
