@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/components/constants.dart';
-import 'package:shop_app/components/theme.dart';
+import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
 import 'package:shop_app/cubit/register/register_cubit.dart';
@@ -27,7 +27,7 @@ void main() async {
       widget = const HomeLayout();
     }
   }
-  runApp(MyApp(
+  runApp(ShopApp(
     currentPage: widget,
   ));
 }
@@ -40,10 +40,10 @@ class MyBlocObserver extends BlocObserver {
   }
 }
 
-class MyApp extends StatelessWidget {
+class ShopApp extends StatelessWidget {
   final Widget currentPage;
 
-  const MyApp({
+  const ShopApp({
     super.key,
     required this.currentPage,
   });

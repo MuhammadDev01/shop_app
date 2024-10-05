@@ -9,20 +9,24 @@ import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/models/login_model.dart';
 import 'package:shop_app/pages/login_page.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
+  State<SettingsPage> createState() => _SettingsPageState();
+}
 
+class _SettingsPageState extends State<SettingsPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          fallback: (context) => const Center(
+          fallback: (_) => const Center(
             child: CircularProgressIndicator(),
           ),
           condition: HomeCubit.get(context).userModel != null,
@@ -82,16 +86,10 @@ class SettingsPage extends StatelessWidget {
                     height: 20,
                   ),
                   customButton(
-                    onTap: () {
-                      CachedHelper.removeData(key: kOnLogging).then((value) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                          (route) => false,
-                        );
-                      });
+                    onTap: () async {
+                      await CachedHelper.removeData(key: kOnLogging);
+
+                      goToSignIn();
                     },
                     textbutton: 'LOGOUT',
                     color: Colors.teal,
@@ -102,6 +100,16 @@ class SettingsPage extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  void goToSignIn() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const LoginPage(),
+      ),
+      (route) => false,
     );
   }
 }

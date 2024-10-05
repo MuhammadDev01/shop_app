@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/constants.dart';
-import 'package:shop_app/components/theme.dart';
+import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/pages/login_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -46,24 +46,22 @@ class _BoardingPageState extends State<BoardingPage> {
 
   bool isLast = false;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context2) {
     return Scaffold(
         appBar: AppBar(
           actions: [
             TextButton(
-              onPressed: () {
-                CachedHelper.saveData(key: kOnBoarding, value: true)
-                    .then((value) {
-                  if (value) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                      (route) => false,
-                    );
-                  }
-                });
+              onPressed: () async {
+                await CachedHelper.saveData(key: kOnBoarding, value: true);
+                if (mounted) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                    (route) => false,
+                  );
+                }
               },
               child: const Text('SKIP'),
             ),
@@ -113,20 +111,19 @@ class _BoardingPageState extends State<BoardingPage> {
                   ),
                   const Spacer(),
                   FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (isLast) {
-                        CachedHelper.saveData(key: kOnBoarding, value: true)
-                            .then((value) {
-                          if (value) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ),
-                              (route) => false,
-                            );
-                          }
-                        });
+                        await CachedHelper.saveData(
+                            key: kOnBoarding, value: true);
+                        if (mounted) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                            (route) => false,
+                          );
+                        }
                       } else {
                         boardingController.nextPage(
                           duration: const Duration(

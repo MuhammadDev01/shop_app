@@ -5,7 +5,7 @@ import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/components/show_toast.dart';
-import 'package:shop_app/components/theme.dart';
+import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
 import 'package:shop_app/cubit/register/register_cubit.dart';
 import 'package:shop_app/cubit/register/register_state.dart';
@@ -13,22 +13,26 @@ import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
 
 // ignore: must_be_immutable
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var formKey = GlobalKey<FormState>();
+  State<RegisterPage> createState() => _RegisterPageState();
+}
 
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
-    var nameController = TextEditingController();
-    var phoneController = TextEditingController();
+class _RegisterPageState extends State<RegisterPage> {
+  final formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<RegisterCubit, RegisterStates>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           if (state.registerModel!.status) {
-            registerToHomeMethod(state, context);
+            registerToHomeMethod(state);
           } else {
             showToast(
               message: state.registerModel!.message!,
@@ -156,25 +160,20 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  void registerToHomeMethod(RegisterSuccessState state, BuildContext context) {
-    showToast(
-      message: state.registerModel!.message!,
-      color: Colors.green,
-    ).then((value) {
-      CachedHelper.saveData(
-              key: kOnLogging, value: state.registerModel!.data!.token)
-          .then((value) {
-        if (value) {
-          token = state.registerModel!.data!.token!;
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeLayout(),
-            ),
-            (route) => false,
-          );
-        }
-      });
-    });
+  void registerToHomeMethod(RegisterSuccessState state) async {
+    await CachedHelper.saveData(
+        key: kOnLogging, value: state.registerModel!.data!.token);
+
+    token = state.registerModel!.data!.token!;
+
+    if (mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeLayout(),
+        ),
+        (route) => false,
+      );
+    }
   }
 }

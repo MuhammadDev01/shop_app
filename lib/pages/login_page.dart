@@ -5,21 +5,26 @@ import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/components/show_toast.dart';
-import 'package:shop_app/components/theme.dart';
+import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
 import 'package:shop_app/cubit/login/login_state.dart';
 import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
 import 'package:shop_app/pages/register_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
-    var formKey = GlobalKey<FormState>();
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
@@ -29,7 +34,7 @@ class LoginPage extends StatelessWidget {
               color: Colors.red,
             );
           } else {
-            loginToHomeMethod(state, context);
+            loginToHomeMethod(state);
           }
         }
       },
@@ -154,25 +159,20 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void loginToHomeMethod(LoginSuccessState state, BuildContext context) {
-    showToast(
-      message: state.loginModel!.message!,
-      color: Colors.green,
-    ).then((value) {
-      CachedHelper.saveData(
-              key: kOnLogging, value: state.loginModel!.data!.token)
-          .then((value) {
-        if (value) {
-          token = state.loginModel!.data!.token!;
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeLayout(),
-            ),
-            (route) => false,
-          );
-        }
-      });
-    });
+  void loginToHomeMethod(LoginSuccessState state) async {
+    await CachedHelper.saveData(
+      key: kOnLogging,
+      value: state.loginModel!.data!.token,
+    );
+    token = state.loginModel!.data!.token!;
+    if (mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeLayout(),
+        ),
+        (route) => false,
+      );
+    }
   }
 }
