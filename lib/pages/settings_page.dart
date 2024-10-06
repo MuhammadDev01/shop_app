@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
+import 'package:shop_app/cubit/app/app_cubit.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
-import 'package:shop_app/cubit/login/login_cubit.dart';
 import 'package:shop_app/helper/cached_helper.dart';
-import 'package:shop_app/models/login_model.dart';
+import 'package:shop_app/models/auth_model.dart';
 import 'package:shop_app/pages/login_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -47,10 +47,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   customTextFormField(
                     prefixIcon: const Icon(Icons.person),
-                    borderColor:
-                        LoginCubit.get(context).currentTheme == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                    borderColor: AppCubit.get(context).currentTheme  == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     textInputType: TextInputType.name,
                     hintText: 'Name',
                     controller: nameController,
@@ -60,10 +59,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   customTextFormField(
                     prefixIcon: const Icon(Icons.email),
-                    borderColor:
-                        LoginCubit.get(context).currentTheme == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                    borderColor: AppCubit.get(context).currentTheme  == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     textInputType: TextInputType.emailAddress,
                     hintText: 'Email',
                     controller: emailController,
@@ -73,10 +71,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   customTextFormField(
                     prefixIcon: const Icon(Icons.phone),
-                    borderColor:
-                        LoginCubit.get(context).currentTheme == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                    borderColor: AppCubit.get(context).currentTheme  == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     textInputType: TextInputType.phone,
                     hintText: 'Phone',
                     controller: phoneController,

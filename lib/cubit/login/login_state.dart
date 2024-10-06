@@ -1,4 +1,4 @@
-import 'package:shop_app/models/login_model.dart';
+import 'package:shop_app/models/auth_model.dart';
 
 abstract class LoginStates {}
 
@@ -7,7 +7,7 @@ final class LoginInitialState extends LoginStates {}
 final class LoginLoadingState extends LoginStates {}
 
 final class LoginSuccessState extends LoginStates {
-  final LoginModel? loginModel;
+  final AuthModel? loginModel;
 
   LoginSuccessState({this.loginModel});
 }

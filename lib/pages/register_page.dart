@@ -5,22 +5,16 @@ import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/components/show_toast.dart';
-import 'package:shop_app/utils/app_theme.dart';
+import 'package:shop_app/cubit/app/app_cubit.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
+import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/register/register_cubit.dart';
 import 'package:shop_app/cubit/register/register_state.dart';
 import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
 
-// ignore: must_be_immutable
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
+class RegisterPage extends StatelessWidget {
+  RegisterPage({super.key});
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -32,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           if (state.registerModel!.status) {
-            registerToHomeMethod(state);
+            registerToHomeMethod(state, context);
           } else {
             showToast(
               message: state.registerModel!.message!,
@@ -41,155 +35,188 @@ class _RegisterPageState extends State<RegisterPage> {
           }
         }
       },
-      builder: (context, state) {
+      builder: (_, state) {
         return Scaffold(
-          appBar: AppBar(),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: SingleChildScrollView(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: Stack(
+            alignment: Alignment.topLeft,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Form(
                   key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'REGISTER',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Register now to browse out hot offers',
-                        style:
-                            Theme.of(context).textTheme.displaySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      customTextFormField(
-                        controller: emailController,
-                        label: const Text('Email Address'),
-                        prefixIcon: const Icon(Icons.email_outlined),
-                        textInputType: TextInputType.emailAddress,
-                        borderColor: LoginCubit.get(context).currentTheme ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      customTextFormField(
-                        controller: passwordController,
-                        label: const Text('password'),
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        obscureText: LoginCubit.get(context).isSecure,
-                        textInputType: TextInputType.visiblePassword,
-                        borderColor: LoginCubit.get(context).currentTheme ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            LoginCubit.get(context).changePasswordIcon();
-                          },
-                          icon: Icon(LoginCubit.get(context).suffixIcon),
+                  child: Center(
+                    child: Column(
+                      //crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _registerTitleAndLogo(context),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      customTextFormField(
-                        controller: nameController,
-                        label: const Text('Name'),
-                        prefixIcon: const Icon(Icons.person),
-                        textInputType: TextInputType.name,
-                        borderColor: LoginCubit.get(context).currentTheme ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      customTextFormField(
-                        controller: phoneController,
-                        label: const Text('Phone'),
-                        prefixIcon: const Icon(Icons.phone),
-                        borderColor: LoginCubit.get(context).currentTheme ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
-                        textInputType: TextInputType.phone,
-                        onSubmitted: (value) {
-                          if (formKey.currentState!.validate()) {
-                            RegisterCubit.get(context).userRegister(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              name: nameController.text,
-                              phone: phoneController.text,
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      ConditionalBuilder(
-                        condition: state is! RegisterLoadingState,
-                        fallback: (context) =>
-                            const Center(child: CircularProgressIndicator()),
-                        builder: (context) => customButton(
-                          onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              RegisterCubit.get(context).userRegister(
-                                email: emailController.text,
-                                password: passwordController.text,
-                                name: nameController.text,
-                                phone: phoneController.text,
-                              );
-                            }
-                          },
-                          textbutton: 'register',
-                          color: defaultColor,
+                        _registerFields(context),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                    ],
+                        _registerButton(state),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+              _darkModeCustomButton(context),
+            ],
           ),
         );
       },
     );
   }
 
-  void registerToHomeMethod(RegisterSuccessState state) async {
-    await CachedHelper.saveData(
-        key: kOnLogging, value: state.registerModel!.data!.token);
-
-    token = state.registerModel!.data!.token!;
-
-    if (mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeLayout(),
+  ConditionalBuilder _registerButton(RegisterStates state) {
+    return ConditionalBuilder(
+      condition: state is! RegisterLoadingState,
+      fallback: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => FittedBox(
+        fit: BoxFit.scaleDown,
+        child: customButton(
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              RegisterCubit.get(context).userRegister(
+                email: emailController.text,
+                password: passwordController.text,
+                name: nameController.text,
+                phone: phoneController.text,
+              );
+            }
+          },
+          textbutton: 'register',
+          color: defaultColor,
         ),
-        (route) => false,
-      );
-    }
+      ),
+    );
+  }
+
+//widgets
+  IconButton _darkModeCustomButton(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.symmetric(vertical: 30),
+      onPressed: () {
+        RegisterCubit.get(context).changeTheme(context);
+      },
+      icon: Icon(Icons.wb_sunny_outlined),
+    );
+  }
+
+  Widget _registerFields(BuildContext context) {
+    return Column(
+      children: [
+        customTextFormField(
+          controller: emailController,
+          label: const Text('Email Address'),
+          prefixIcon: const Icon(Icons.email_outlined),
+          textInputType: TextInputType.emailAddress,
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        customTextFormField(
+          controller: passwordController,
+          label: const Text('password'),
+          prefixIcon: const Icon(Icons.lock_outline),
+          obscureText: RegisterCubit.get(context).isSecure,
+          textInputType: TextInputType.visiblePassword,
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+          suffixIcon: IconButton(
+            onPressed: () {
+              RegisterCubit.get(context).changePasswordIcon();
+            },
+            icon: Icon(RegisterCubit.get(context).suffixIcon),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        customTextFormField(
+          controller: nameController,
+          label: const Text('Name'),
+          prefixIcon: const Icon(Icons.person),
+          textInputType: TextInputType.name,
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        customTextFormField(
+          controller: phoneController,
+          label: const Text('Phone'),
+          prefixIcon: const Icon(Icons.phone),
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+          textInputType: TextInputType.phone,
+          onSubmitted: (value) {
+            if (formKey.currentState!.validate()) {
+              RegisterCubit.get(context).userRegister(
+                email: emailController.text,
+                password: passwordController.text,
+                name: nameController.text,
+                phone: phoneController.text,
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _registerTitleAndLogo(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(
+          logoImage,
+          scale: 10,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          'shopify register'.toUpperCase(),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          'Register now to browse out hot offers',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ],
+    );
+  }
+
+  //methods
+  void registerToHomeMethod(
+      RegisterSuccessState state, BuildContext context) async {
+    await CachedHelper.saveData(
+            key: kOnLogging, value: state.registerModel!.data!.token)
+        .then((value) {
+      if (value && context.mounted) {
+        token = state.registerModel!.data!.token!;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeLayout(),
+          ),
+          (route) => false,
+        );
+      }
+    });
   }
 }

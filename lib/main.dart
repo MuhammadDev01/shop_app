@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/components/constants.dart';
+import 'package:shop_app/cubit/app/app_cubit.dart';
 import 'package:shop_app/cubit/login/login_state.dart';
 import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
@@ -61,6 +62,9 @@ class ShopApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => AppCubit(),
+        ),
+        BlocProvider(
           create: (context) => HomeCubit()
             ..getHomeData()
             ..getCategoriesData()
@@ -74,14 +78,14 @@ class ShopApp extends StatelessWidget {
           create: (context) => RegisterCubit(),
         )
       ],
-      child: BlocBuilder<LoginCubit,LoginStates >(
+      child: BlocBuilder<AppCubit, AppStates>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: currentPage,
             theme: defaultTheme(context),
             darkTheme: darkTheme(context),
-            themeMode: LoginCubit.get(context).currentTheme,
+            themeMode: AppCubit.get(context).currentTheme,
           );
         },
       ),

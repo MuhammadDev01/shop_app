@@ -42,10 +42,10 @@ ThemeData defaultTheme(BuildContext context) => ThemeData(
     );
 
 ThemeData darkTheme(BuildContext context) => ThemeData(
+      scaffoldBackgroundColor: const Color(0xff27292a),
       primarySwatch: defaultColor,
       brightness: Brightness.dark,
       fontFamily: 'REM',
-      // primaryTextTheme: TextTheme(),
       appBarTheme: const AppBarTheme(
         titleSpacing: 20,
         backgroundColor: Color(0xff27292a),
@@ -64,14 +64,12 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
           size: 32,
         ),
       ),
-      scaffoldBackgroundColor: const Color(0xff27292a),
       textTheme: TextTheme(
         titleLarge: AppStyle.style30Semibold(context).copyWith(
           color: Colors.white,
         ),
         titleMedium: AppStyle.style28Medium(context),
       ),
-
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Color(0xff27292a),

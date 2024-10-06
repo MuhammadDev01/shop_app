@@ -40,7 +40,7 @@ final class GetFavouritesFailureState extends HomeStates {}
 final class GetProfileLoadingState extends HomeStates {}
 
 final class GetProfileSuccessState extends HomeStates {
-  final LoginModel userModel;
+  final AuthModel userModel;
 
   GetProfileSuccessState({required this.userModel});
 }
@@ -50,7 +50,7 @@ final class GetProfileFailureState extends HomeStates {}
 final class UpdateProfileLoadingState extends HomeStates {}
 
 final class UpdateProfileSuccessState extends HomeStates {
-  final LoginModel updateUserModel;
+  final AuthModel updateUserModel;
 
   UpdateProfileSuccessState({required this.updateUserModel});
 }

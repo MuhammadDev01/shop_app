@@ -7,7 +7,7 @@ import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/favourites_model.dart';
 import 'package:shop_app/models/get_favourites_model.dart';
 import 'package:shop_app/models/home_model.dart';
-import 'package:shop_app/models/login_model.dart';
+import 'package:shop_app/models/auth_model.dart';
 import 'package:shop_app/pages/category_page.dart';
 import 'package:shop_app/pages/favourite_page.dart';
 import 'package:shop_app/pages/product_page.dart';
@@ -115,14 +115,14 @@ class HomeCubit extends Cubit<HomeStates> {
     });
   }
 
-  LoginModel? userModel;
+  AuthModel? userModel;
   void getProfileData() {
     emit(GetProfileLoadingState());
     DioHelper.getData(
       url: pROFILE,
       token: token,
     ).then((value) {
-      userModel = LoginModel.fromJson(value.data);
+      userModel = AuthModel.fromJson(value.data);
       emit(GetProfileSuccessState(userModel: userModel!));
     });
   }
@@ -144,7 +144,7 @@ class HomeCubit extends Cubit<HomeStates> {
         'phone': phone,
       },
     ).then((value) {
-      userModel = LoginModel.fromJson(value.data);
+      userModel = AuthModel.fromJson(value.data);
       emit(UpdateProfileSuccessState(updateUserModel: userModel!));
     }).catchError((error) {
       debugPrint(error.toString());

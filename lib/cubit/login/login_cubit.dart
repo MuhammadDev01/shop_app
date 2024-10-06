@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/cubit/login/login_state.dart';
 import 'package:shop_app/helper/dio_helper.dart';
 import 'package:shop_app/helper/end_points.dart';
-import 'package:shop_app/models/login_model.dart';
+import 'package:shop_app/models/auth_model.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(LoginInitialState());
   static LoginCubit get(context) => BlocProvider.of(context);
-  LoginModel? loginModel;
+  AuthModel? loginModel;
   bool isSecure = true;
   IconData suffixIcon = Icons.visibility_off_outlined;
   changePasswordIcon() {
@@ -18,13 +19,13 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangePasswordIconState());
   }
 
-  ThemeMode currentTheme = ThemeMode.light;
-  changeTheme(BuildContext context) {
-    currentTheme == ThemeMode.light
-        ? currentTheme = ThemeMode.dark
-        : currentTheme = ThemeMode.light;
-    emit(ChangeThemeAppState());
-  }
+  //ThemeMode currentTheme = ThemeMode.light;
+  // changeTheme() {
+  //   currentTheme == ThemeMode.light
+  //       ? currentTheme = ThemeMode.dark
+  //       : currentTheme = ThemeMode.light;
+  //   emit(ChangeThemeAppState());
+  // }
 
   Future<void> userLogin({
     required String email,
@@ -39,7 +40,7 @@ class LoginCubit extends Cubit<LoginStates> {
         'password': password,
       },
     ).then((value) {
-      loginModel = LoginModel.fromJson(value.data);
+      loginModel = AuthModel.fromJson(value.data);
       emit(LoginSuccessState(loginModel: loginModel));
     }).catchError((error) {
       emit(LoginFailureState(errorMassege: error.toString()));

@@ -5,6 +5,7 @@ import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/components/show_toast.dart';
+import 'package:shop_app/cubit/app/app_cubit.dart';
 import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
 import 'package:shop_app/cubit/login/login_state.dart';
@@ -61,17 +62,21 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                onPressed: () {
-                  LoginCubit.get(context).changeTheme(context);
-                },
-                icon: Icon(Icons.wb_sunny_outlined),
-              ),
+              _darkModeCustomButton(context),
             ],
           ),
         );
       },
+    );
+  }
+
+  IconButton _darkModeCustomButton(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.symmetric(vertical: 30),
+      onPressed: () {
+        AppCubit.get(context).changeTheme();
+      },
+      icon: Icon(Icons.wb_sunny_outlined),
     );
   }
 
@@ -99,51 +104,45 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginFields(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginStates>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            customTextFormField(
-              controller: emailController,
-              label: const Text('Email Address'),
-              prefixIcon: const Icon(Icons.email_outlined),
-              textInputType: TextInputType.emailAddress,
-              borderColor:
-                  LoginCubit.get(context).currentTheme == ThemeMode.dark
-                      ? Colors.white
-                      : Colors.black,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            customTextFormField(
-              controller: passwordController,
-              onSubmitted: (p0) {
-                if (formKey.currentState!.validate()) {
-                  LoginCubit.get(context).userLogin(
-                    email: emailController.text,
-                    password: passwordController.text,
-                  );
-                }
-              },
-              label: const Text('password'),
-              prefixIcon: const Icon(Icons.lock_outline),
-              obscureText: LoginCubit.get(context).isSecure,
-              textInputType: TextInputType.visiblePassword,
-              borderColor:
-                  LoginCubit.get(context).currentTheme == ThemeMode.dark
-                      ? Colors.white
-                      : Colors.black,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  LoginCubit.get(context).changePasswordIcon();
-                },
-                icon: Icon(LoginCubit.get(context).suffixIcon),
-              ),
-            ),
-          ],
-        );
-      },
+    return Column(
+      children: [
+        customTextFormField(
+          controller: emailController,
+          label: const Text('Email Address'),
+          prefixIcon: const Icon(Icons.email_outlined),
+          textInputType: TextInputType.emailAddress,
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        customTextFormField(
+          controller: passwordController,
+          onSubmitted: (p0) {
+            if (formKey.currentState!.validate()) {
+              LoginCubit.get(context).userLogin(
+                email: emailController.text,
+                password: passwordController.text,
+              );
+            }
+          },
+          label: const Text('password'),
+          prefixIcon: const Icon(Icons.lock_outline),
+          obscureText: LoginCubit.get(context).isSecure,
+          textInputType: TextInputType.visiblePassword,
+          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+          suffixIcon: IconButton(
+            onPressed: () {
+              LoginCubit.get(context).changePasswordIcon();
+            },
+            icon: Icon(LoginCubit.get(context).suffixIcon),
+          ),
+        ),
+      ],
     );
   }
 
@@ -185,12 +184,11 @@ class LoginPage extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const RegisterPage(),
+                builder: (context) => RegisterPage(),
               ),
-              (route) => false,
             );
           },
           child: Text(
@@ -204,7 +202,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  //functions
+  //methods
   Future<void> loginToHomeMethod(
       LoginSuccessState state, BuildContext context) async {
     await CachedHelper.saveData(

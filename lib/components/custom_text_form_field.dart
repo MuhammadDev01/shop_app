@@ -33,6 +33,7 @@ Widget customTextFormField({
         },
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
+          contentPadding: EdgeInsets.zero,
           label: label,
           hintText: hintText,
           suffixIcon: suffixIcon,
