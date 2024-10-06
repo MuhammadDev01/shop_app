@@ -12,14 +12,8 @@ import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
 import 'package:shop_app/pages/register_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
+  LoginPage({super.key});
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -34,145 +28,199 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.red,
             );
           } else {
-            loginToHomeMethod(state);
+            loginToHomeMethod(state, context);
           }
         }
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: SingleChildScrollView(
+          body: Stack(
+            alignment: Alignment.topLeft,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Form(
                   key: formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'LOGIN',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
+                      _logoAndTitleLogin(context),
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'Login now to browse out hot offers',
-                        style:
-                            Theme.of(context).textTheme.displaySmall!.copyWith(
-                                  color: Colors.grey,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      customTextFormField(
-                        controller: emailController,
-                        label: const Text('Email Address'),
-                        prefixIcon: const Icon(Icons.email_outlined),
-                        textInputType: TextInputType.emailAddress,
-                      ),
+                      _loginFields(context),
                       const SizedBox(
                         height: 20,
                       ),
-                      customTextFormField(
-                        controller: passwordController,
-                        onSubmitted: (p0) {
-                          if (formKey.currentState!.validate()) {
-                            LoginCubit.get(context).userLogin(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                          }
-                        },
-                        label: const Text('password'),
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        obscureText: LoginCubit.get(context).isSecure,
-                        textInputType: TextInputType.visiblePassword,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            LoginCubit.get(context).changePasswordIcon();
-                          },
-                          icon: Icon(LoginCubit.get(context).suffixIcon),
-                        ),
-                      ),
+                      _loginButton(state),
                       const SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
-                      ConditionalBuilder(
-                        condition: state is! LoginLoadingState,
-                        fallback: (context) =>
-                            const Center(child: CircularProgressIndicator()),
-                        builder: (context) => customButton(
-                          onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              LoginCubit.get(context).userLogin(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
-                            }
-                          },
-                          textbutton: 'login',
-                          color: defaultColor,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Don\'t have an account ?',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const RegisterPage(),
-                                ),
-                                (route) => false,
-                              );
-                            },
-                            child: const Text('REGISTER'),
-                          ),
-                        ],
-                      ),
+                      _goToRegister(context),
                     ],
                   ),
                 ),
               ),
-            ),
+              IconButton(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                onPressed: () {
+                  LoginCubit.get(context).changeTheme(context);
+                },
+                icon: Icon(Icons.wb_sunny_outlined),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  void loginToHomeMethod(LoginSuccessState state) async {
+  //widgets
+  ConditionalBuilder _loginButton(LoginStates state) {
+    return ConditionalBuilder(
+      condition: state is! LoginLoadingState,
+      fallback: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => FittedBox(
+        fit: BoxFit.scaleDown,
+        child: customButton(
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              LoginCubit.get(context).userLogin(
+                email: emailController.text,
+                password: passwordController.text,
+              );
+            }
+          },
+          textbutton: 'login',
+          color: defaultColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _loginFields(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginStates>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            customTextFormField(
+              controller: emailController,
+              label: const Text('Email Address'),
+              prefixIcon: const Icon(Icons.email_outlined),
+              textInputType: TextInputType.emailAddress,
+              borderColor:
+                  LoginCubit.get(context).currentTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            customTextFormField(
+              controller: passwordController,
+              onSubmitted: (p0) {
+                if (formKey.currentState!.validate()) {
+                  LoginCubit.get(context).userLogin(
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+                }
+              },
+              label: const Text('password'),
+              prefixIcon: const Icon(Icons.lock_outline),
+              obscureText: LoginCubit.get(context).isSecure,
+              textInputType: TextInputType.visiblePassword,
+              borderColor:
+                  LoginCubit.get(context).currentTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  LoginCubit.get(context).changePasswordIcon();
+                },
+                icon: Icon(LoginCubit.get(context).suffixIcon),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Column _logoAndTitleLogin(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(
+          logoImage,
+          scale: 10,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'welcome to shopify'.toUpperCase(),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Login now to browse out hot offers',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ],
+    );
+  }
+
+  Widget _goToRegister(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Don't have an account ?",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const RegisterPage(),
+              ),
+              (route) => false,
+            );
+          },
+          child: Text(
+            'REGISTER',
+            style: TextStyle(
+              decoration: TextDecoration.underline, // Apply underline
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  //functions
+  Future<void> loginToHomeMethod(
+      LoginSuccessState state, BuildContext context) async {
     await CachedHelper.saveData(
       key: kOnLogging,
       value: state.loginModel!.data!.token,
-    );
-    token = state.loginModel!.data!.token!;
-    if (mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeLayout(),
-        ),
-        (route) => false,
-      );
-    }
+    ).then((value) {
+      if (value && context.mounted) {
+        token = state.loginModel!.data!.token!;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeLayout(),
+          ),
+          (route) => false,
+        );
+      }
+    });
   }
 }

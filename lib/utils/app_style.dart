@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
 class AppStyle {
-  TextStyle style24Semibold(BuildContext context) {
+  static TextStyle style30Semibold(BuildContext context) {
+    return TextStyle(
+      fontSize: getResponsiveFontSize(context, fontSize: 30),
+      fontFamily: 'REM',
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    );
+  }
+  static TextStyle style28Medium(BuildContext context) {
     return TextStyle(
       fontSize: getResponsiveFontSize(context, fontSize: 24),
       fontFamily: 'REM',
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w500,
+      color: Colors.grey,
     );
   }
 }

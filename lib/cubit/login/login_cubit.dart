@@ -18,6 +18,14 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangePasswordIconState());
   }
 
+  ThemeMode currentTheme = ThemeMode.light;
+  changeTheme(BuildContext context) {
+    currentTheme == ThemeMode.light
+        ? currentTheme = ThemeMode.dark
+        : currentTheme = ThemeMode.light;
+    emit(ChangeThemeAppState());
+  }
+
   Future<void> userLogin({
     required String email,
     required String password,

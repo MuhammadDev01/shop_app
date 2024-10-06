@@ -14,8 +14,8 @@ Widget customButton({
         color: color,
         borderRadius: BorderRadius.circular(4),
       ),
-      width: double.infinity,
-      height: 60,
+      width: 400,
+      height: 50,
       child: Text(
         textbutton.toUpperCase(),
         style: TextStyle(

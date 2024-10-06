@@ -79,6 +79,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         label: const Text('Email Address'),
                         prefixIcon: const Icon(Icons.email_outlined),
                         textInputType: TextInputType.emailAddress,
+                        borderColor: LoginCubit.get(context).currentTheme ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                       const SizedBox(
                         height: 20,
@@ -89,6 +93,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         prefixIcon: const Icon(Icons.lock_outline),
                         obscureText: LoginCubit.get(context).isSecure,
                         textInputType: TextInputType.visiblePassword,
+                        borderColor: LoginCubit.get(context).currentTheme ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                         suffixIcon: IconButton(
                           onPressed: () {
                             LoginCubit.get(context).changePasswordIcon();
@@ -104,6 +112,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         label: const Text('Name'),
                         prefixIcon: const Icon(Icons.person),
                         textInputType: TextInputType.name,
+                        borderColor: LoginCubit.get(context).currentTheme ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                       const SizedBox(
                         height: 20,
@@ -112,6 +124,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: phoneController,
                         label: const Text('Phone'),
                         prefixIcon: const Icon(Icons.phone),
+                        borderColor: LoginCubit.get(context).currentTheme ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                         textInputType: TextInputType.phone,
                         onSubmitted: (value) {
                           if (formKey.currentState!.validate()) {

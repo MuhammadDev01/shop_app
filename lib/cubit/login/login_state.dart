@@ -19,3 +19,4 @@ final class LoginFailureState extends LoginStates {
 }
 
 final class ChangePasswordIconState extends LoginStates {}
+final class ChangeThemeAppState extends LoginStates {}

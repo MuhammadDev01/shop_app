@@ -1,6 +1,9 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/components/constants.dart';
+import 'package:shop_app/cubit/login/login_state.dart';
 import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 import 'package:shop_app/cubit/login/login_cubit.dart';
@@ -16,20 +19,25 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   await CachedHelper.init();
   DioHelper.init();
-  Widget widget;
+  Widget currentPage;
   if (CachedHelper.getData(key: kOnBoarding) == null) {
-    widget = const BoardingPage();
+    currentPage = const BoardingPage();
   } else {
     if (CachedHelper.getData(key: kOnLogging) == null) {
-      widget = const LoginPage();
+      currentPage = LoginPage();
     } else {
       token = CachedHelper.getData(key: kOnLogging);
-      widget = const HomeLayout();
+      currentPage = const HomeLayout();
     }
   }
-  runApp(ShopApp(
-    currentPage: widget,
-  ));
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => ShopApp(
+        currentPage: currentPage,
+      ), // Wrap your app
+    ),
+  );
 }
 
 class MyBlocObserver extends BlocObserver {
@@ -66,12 +74,16 @@ class ShopApp extends StatelessWidget {
           create: (context) => RegisterCubit(),
         )
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: currentPage,
-        theme: defaultTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
+      child: BlocBuilder<LoginCubit,LoginStates >(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: currentPage,
+            theme: defaultTheme(context),
+            darkTheme: darkTheme(context),
+            themeMode: LoginCubit.get(context).currentTheme,
+          );
+        },
       ),
     );
   }

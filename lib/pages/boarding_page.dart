@@ -57,7 +57,7 @@ class _BoardingPageState extends State<BoardingPage> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
+                      builder: (context) =>  LoginPage(),
                     ),
                     (route) => false,
                   );
@@ -119,7 +119,7 @@ class _BoardingPageState extends State<BoardingPage> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
+                              builder: (_) =>  LoginPage(),
                             ),
                             (route) => false,
                           );
