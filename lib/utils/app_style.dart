@@ -9,12 +9,22 @@ class AppStyle {
       color: Colors.black,
     );
   }
-  static TextStyle style28Medium(BuildContext context) {
+
+  static TextStyle style24Medium(BuildContext context) {
     return TextStyle(
       fontSize: getResponsiveFontSize(context, fontSize: 24),
       fontFamily: 'REM',
       fontWeight: FontWeight.w500,
       color: Colors.grey,
+    );
+  }
+
+  static TextStyle style18Medium(BuildContext context) {
+    return TextStyle(
+      fontSize: getResponsiveFontSize(context, fontSize: 18),
+      fontFamily: 'REM',
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
     );
   }
 }

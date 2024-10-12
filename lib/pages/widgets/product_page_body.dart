@@ -6,101 +6,102 @@ import 'package:shop_app/pages/widgets/build_categories_list.dart';
 import 'package:shop_app/pages/widgets/build_grid_product.dart';
 
 class ProductPageBody extends StatelessWidget {
-  const ProductPageBody(
-      {super.key, required this.homeModel, required this.categoriesModel});
+  const ProductPageBody({
+    super.key,
+    required this.homeModel,
+    required this.categoriesModel,
+  });
   final HomeModel homeModel;
   final CategoriesModel categoriesModel;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: const SizedBox(
             height: 10.0,
           ),
-          CarouselSlider(
-            items: homeModel.data.banners
-                .map(
-                  (e) => Image(
-                    image: NetworkImage(
-                      e.image,
-                    ),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                )
-                .toList(),
-            options: CarouselOptions(
-              height: 250,
-              initialPage: 0,
-              viewportFraction: 1.0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(seconds: 1),
-              scrollDirection: Axis.horizontal,
-              autoPlayCurve: Curves.fastOutSlowIn,
-            ),
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        ),
+        SliverToBoxAdapter(child: _productsSlider()),
+        SliverPadding(
+          padding: const EdgeInsets.all(10.0), // Adjust padding as needed
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              [
                 Text(
                   'Categories',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 _categoriesList(categoriesModel, context),
                 const SizedBox(
                   height: 30,
                 ),
-                const Text(
+                Text(
                   'New Products',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  height: 30.0,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      color: Colors.grey[300],
-                      child: GridView.count(
-                        shrinkWrap: true,
-                        childAspectRatio: 1 / 1.4,
-                        physics: const NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: 1.0,
-                        crossAxisSpacing: 1.0,
-                        crossAxisCount: 2,
-                        children: List.generate(
-                          homeModel.data.products.length,
-                          (index) => buildGridProduct(
-                            homeModel.data.products[index],
-                            context,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  height: 15.0,
                 ),
               ],
             ),
           ),
-        ],
+        ),
+        SliverFillRemaining(
+          child: Container(
+            color: Colors.grey.shade100,
+            child: _productsGridView(context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _productsGridView(BuildContext context) {
+    return GridView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 4),
+      itemBuilder: (context, index) => buildGridProduct(
+        homeModel.data.products[index],
+        context,
+      ),
+      itemCount: homeModel.data.products.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+
+        mainAxisSpacing: 2, // المسافة بين العناصر عمودياً
+        crossAxisSpacing: 2, // المسافة بين الأعمدة أفقياً
+      ),
+    );
+  }
+
+  CarouselSlider _productsSlider() {
+    return CarouselSlider(
+      items: homeModel.data.banners
+          .map(
+            (e) => Image(
+              image: NetworkImage(
+                e.image,
+              ),
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+          )
+          .toList(),
+      options: CarouselOptions(
+        initialPage: 0,
+        viewportFraction: 1.0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(seconds: 1),
+        scrollDirection: Axis.horizontal,
+        autoPlayCurve: Curves.fastOutSlowIn,
       ),
     );
   }

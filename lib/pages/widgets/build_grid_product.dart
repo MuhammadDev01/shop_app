@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/utils/app_style.dart';
 import 'package:shop_app/utils/app_theme.dart';
 
 Widget buildGridProduct(ProductModel model, BuildContext context) => Container(
       color: Colors.white,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // لتنسيق النص في جهة اليسار
         children: [
-          SizedBox(
-            height: 250,
+          Expanded(
             child: Stack(
-              alignment: AlignmentDirectional.bottomStart,
+              alignment: Alignment.bottomLeft,
               children: [
                 Image.network(
                   model.image,
-                  height: 250,
                   width: double.infinity,
+                  //  fit: BoxFit.cover, // يجعل الصورة تتكيف مع حجم المساحة
                 ),
                 if (model.discount != 0)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     color: Colors.red,
                     child: const Text(
-                      'DISOUNT',
+                      'DISCOUNT',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 10,
                       ),
                     ),
                   ),
@@ -34,44 +35,36 @@ Widget buildGridProduct(ProductModel model, BuildContext context) => Container(
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // لضبط النص في اليسار
               children: [
                 Text(
                   model.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppStyle.style18Medium(context),
                 ),
-                const SizedBox(
-                  height: 18.0,
-                ),
+                const SizedBox(height: 8), // لإضافة مسافة صغيرة بين النص والسعر
                 Row(
                   children: [
                     Text(
                       '${model.price}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: defaultColor,
-                      ),
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            color: defaultColor,
+                          ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    SizedBox(width: 8),
                     if (model.discount != 0)
                       Text(
                         '${model.oldPrice}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                            ),
                       ),
-                    const Spacer(),
+                    Spacer(),
                     IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -84,10 +77,11 @@ Widget buildGridProduct(ProductModel model, BuildContext context) => Container(
                             HomeCubit.get(context).favorites[model.id] == true
                                 ? Colors.red
                                 : defaultColor,
-                        radius: 21,
+                        radius: 14,
                         child: const Icon(
                           Icons.favorite,
                           color: Colors.white,
+                          size: 16,
                         ),
                       ),
                     ),

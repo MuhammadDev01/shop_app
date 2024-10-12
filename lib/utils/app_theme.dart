@@ -4,7 +4,6 @@ import 'package:shop_app/utils/app_style.dart';
 
 ThemeData defaultTheme(BuildContext context) => ThemeData(
       primarySwatch: defaultColor,
-      
       brightness: Brightness.light,
       fontFamily: 'REM',
       appBarTheme: const AppBarTheme(
@@ -31,7 +30,8 @@ ThemeData defaultTheme(BuildContext context) => ThemeData(
       ),
       textTheme: TextTheme(
         titleLarge: AppStyle.style30Semibold(context),
-        titleMedium: AppStyle.style28Medium(context),
+        titleMedium: AppStyle.style24Medium(context),
+        titleSmall: AppStyle.style18Medium(context),
       ),
       scaffoldBackgroundColor: Colors.white,
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -69,7 +69,8 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
         titleLarge: AppStyle.style30Semibold(context).copyWith(
           color: Colors.white,
         ),
-        titleMedium: AppStyle.style28Medium(context),
+        titleMedium: AppStyle.style24Medium(context),
+        titleSmall: AppStyle.style18Medium(context),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
