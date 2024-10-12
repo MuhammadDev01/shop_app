@@ -3,12 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/components/constants.dart';
-import 'package:shop_app/cubit/app/app_cubit.dart';
-import 'package:shop_app/cubit/login/login_state.dart';
+import 'package:shop_app/cubit/auth/auth_cubit.dart';
 import 'package:shop_app/utils/app_theme.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
-import 'package:shop_app/cubit/login/login_cubit.dart';
-import 'package:shop_app/cubit/register/register_cubit.dart';
 import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/helper/dio_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
@@ -62,7 +59,7 @@ class ShopApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AppCubit(),
+          create: (context) => AuthCubit(),
         ),
         BlocProvider(
           create: (context) => HomeCubit()
@@ -71,21 +68,15 @@ class ShopApp extends StatelessWidget {
             ..getFavouritesData()
             ..getProfileData(),
         ),
-        BlocProvider(
-          create: (context) => LoginCubit(),
-        ),
-        BlocProvider(
-          create: (context) => RegisterCubit(),
-        )
       ],
-      child: BlocBuilder<AppCubit, AppStates>(
+      child: BlocBuilder<AuthCubit, AuthStates>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: currentPage,
             theme: defaultTheme(context),
             darkTheme: darkTheme(context),
-            themeMode: AppCubit.get(context).currentTheme,
+            themeMode: AuthCubit.get(context).currentTheme,
           );
         },
       ),

@@ -5,39 +5,46 @@ import 'package:shop_app/components/constants.dart';
 import 'package:shop_app/components/custom_button.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/components/show_toast.dart';
-import 'package:shop_app/cubit/app/app_cubit.dart';
-import 'package:shop_app/cubit/login/login_cubit.dart';
-import 'package:shop_app/utils/app_theme.dart';
-import 'package:shop_app/cubit/register/register_cubit.dart';
-import 'package:shop_app/cubit/register/register_state.dart';
+import 'package:shop_app/cubit/auth/auth_cubit.dart';
 import 'package:shop_app/helper/cached_helper.dart';
 import 'package:shop_app/layout/home_layout.dart';
+import 'package:shop_app/utils/app_theme.dart';
 
-class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
-  final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  var formKey = GlobalKey<FormState>();
+
+  var emailController = TextEditingController();
+
+  var passwordController = TextEditingController();
+
+  var nameController = TextEditingController();
+
+  var phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterCubit, RegisterStates>(
+    return BlocConsumer<AuthCubit, AuthStates>(
       listener: (context, state) {
-        if (state is RegisterSuccessState) {
-          if (state.registerModel!.status) {
-            registerToHomeMethod(state, context);
+        if (state is AuthSuccessState) {
+          if (state.authModel!.status) {
+            _registerToHome(state, context);
           } else {
             showToast(
-              message: state.registerModel!.message!,
+              message: state.authModel!.message!,
               color: Colors.red,
             );
           }
         }
       },
-      builder: (_, state) {
+      builder: (context, state) {
         return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: Stack(
             alignment: Alignment.topLeft,
             children: [
@@ -72,16 +79,17 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  ConditionalBuilder _registerButton(RegisterStates state) {
+//widgets
+  ConditionalBuilder _registerButton(AuthStates state) {
     return ConditionalBuilder(
-      condition: state is! RegisterLoadingState,
+      condition: state is! AuthLoadingState,
       fallback: (context) => const Center(child: CircularProgressIndicator()),
       builder: (context) => FittedBox(
         fit: BoxFit.scaleDown,
         child: customButton(
           onTap: () {
             if (formKey.currentState!.validate()) {
-              RegisterCubit.get(context).userRegister(
+              AuthCubit.get(context).userRegister(
                 email: emailController.text,
                 password: passwordController.text,
                 name: nameController.text,
@@ -96,12 +104,11 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-//widgets
   IconButton _darkModeCustomButton(BuildContext context) {
     return IconButton(
       padding: EdgeInsets.symmetric(vertical: 30),
       onPressed: () {
-        RegisterCubit.get(context).changeTheme(context);
+        AuthCubit.get(context).changeTheme();
       },
       icon: Icon(Icons.wb_sunny_outlined),
     );
@@ -115,7 +122,7 @@ class RegisterPage extends StatelessWidget {
           label: const Text('Email Address'),
           prefixIcon: const Icon(Icons.email_outlined),
           textInputType: TextInputType.emailAddress,
-          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+          borderColor: AuthCubit.get(context).currentTheme == ThemeMode.dark
               ? Colors.white
               : Colors.black,
         ),
@@ -126,16 +133,18 @@ class RegisterPage extends StatelessWidget {
           controller: passwordController,
           label: const Text('password'),
           prefixIcon: const Icon(Icons.lock_outline),
-          obscureText: RegisterCubit.get(context).isSecure,
+          obscureText: AuthCubit.get(context).isSecure,
           textInputType: TextInputType.visiblePassword,
-          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+          borderColor: AuthCubit.get(context).currentTheme == ThemeMode.dark
               ? Colors.white
               : Colors.black,
           suffixIcon: IconButton(
             onPressed: () {
-              RegisterCubit.get(context).changePasswordIcon();
+              AuthCubit.get(context).changePasswordIcon();
             },
-            icon: Icon(RegisterCubit.get(context).suffixIcon),
+            icon: Icon(
+              AuthCubit.get(context).suffixIcon,
+            ),
           ),
         ),
         const SizedBox(
@@ -146,7 +155,7 @@ class RegisterPage extends StatelessWidget {
           label: const Text('Name'),
           prefixIcon: const Icon(Icons.person),
           textInputType: TextInputType.name,
-          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+          borderColor: AuthCubit.get(context).currentTheme == ThemeMode.dark
               ? Colors.white
               : Colors.black,
         ),
@@ -157,13 +166,13 @@ class RegisterPage extends StatelessWidget {
           controller: phoneController,
           label: const Text('Phone'),
           prefixIcon: const Icon(Icons.phone),
-          borderColor: AppCubit.get(context).currentTheme == ThemeMode.dark
+          borderColor: AuthCubit.get(context).currentTheme == ThemeMode.dark
               ? Colors.white
               : Colors.black,
           textInputType: TextInputType.phone,
           onSubmitted: (value) {
             if (formKey.currentState!.validate()) {
-              RegisterCubit.get(context).userRegister(
+              AuthCubit.get(context).userRegister(
                 email: emailController.text,
                 password: passwordController.text,
                 name: nameController.text,
@@ -201,14 +210,13 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  //methods
-  void registerToHomeMethod(
-      RegisterSuccessState state, BuildContext context) async {
+  //functions
+  void _registerToHome(AuthSuccessState state, BuildContext context) async {
     await CachedHelper.saveData(
-            key: kOnLogging, value: state.registerModel!.data!.token)
+            key: kOnLogging, value: state.authModel!.data!.token)
         .then((value) {
       if (value && context.mounted) {
-        token = state.registerModel!.data!.token!;
+        token = state.authModel!.data!.token!;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
