@@ -4,6 +4,7 @@ import 'package:shop_app/utils/app_style.dart';
 
 ThemeData defaultTheme(BuildContext context) => ThemeData(
       primarySwatch: defaultColor,
+      
       brightness: Brightness.light,
       fontFamily: 'REM',
       appBarTheme: const AppBarTheme(

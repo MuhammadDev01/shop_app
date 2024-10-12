@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/components/build_list_product.dart';
+import 'package:shop_app/pages/widgets/build_list_product.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/cubit/auth/auth_cubit.dart';
 import 'package:shop_app/cubit/search/search_cubit.dart';

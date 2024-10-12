@@ -1,7 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/components/build_list_product.dart';
+import 'package:shop_app/pages/widgets/build_list_product.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 
 class FavouritePage extends StatelessWidget {

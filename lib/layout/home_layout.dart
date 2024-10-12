@@ -29,12 +29,10 @@ class HomeLayout extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
+            elevation: 0.0,
+            title: Text(
               'Salla',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             actions: [
               Padding(
@@ -50,7 +48,7 @@ class HomeLayout extends StatelessWidget {
                   icon: const Icon(
                     Icons.search,
                     color: Colors.black,
-                    size: 36,
+                    size: 24,
                   ),
                 ),
               ),
