@@ -25,18 +25,11 @@ class ProductPageBody extends StatelessWidget {
         ),
         SliverToBoxAdapter(child: _productsSlider()),
         SliverPadding(
-          padding: const EdgeInsets.all(10.0), // Adjust padding as needed
+          padding: const EdgeInsets.all(10.0),
           sliver: SliverList(
             delegate: SliverChildListDelegate(
               [
-                Text(
-                  'Categories',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _categoriesList(categoriesModel, context),
+                _categoriesSection(categoriesModel, context),
                 const SizedBox(
                   height: 30,
                 ),
@@ -107,15 +100,27 @@ class ProductPageBody extends StatelessWidget {
     );
   }
 
-  SingleChildScrollView _categoriesList(
+  Widget _categoriesSection(
       CategoriesModel categoriesModel, BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: categoriesModel.data.dataData
-            .map((model) => buildCategoriesList(model, context))
-            .toList(),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Categories',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: categoriesModel.data.dataData
+                .map((model) => buildCategoriesList(model, context))
+                .toList(),
+          ),
+        ),
+      ],
     );
   }
 }
