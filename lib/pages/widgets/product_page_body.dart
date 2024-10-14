@@ -51,7 +51,7 @@ class ProductPageBody extends StatelessWidget {
             ),
           ),
         ),
-        SliverFillRemaining(
+        SliverToBoxAdapter(
           child: Container(
             color: Colors.grey.shade100,
             child: _productsGridView(context),
@@ -63,6 +63,7 @@ class ProductPageBody extends StatelessWidget {
 
   Widget _productsGridView(BuildContext context) {
     return GridView.builder(
+      shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 4),
       itemBuilder: (context, index) => buildGridProduct(
