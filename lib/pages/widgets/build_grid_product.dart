@@ -44,7 +44,7 @@ Widget buildGridProduct(ProductModel model, BuildContext context) => Container(
                   model.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: AppStyle.style18Medium(context),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: 8), // لإضافة مسافة صغيرة بين النص والسعر
                 Row(
@@ -68,13 +68,14 @@ Widget buildGridProduct(ProductModel model, BuildContext context) => Container(
                     IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        HomeCubit.get(context).postFavouritesData(
+                        HomeCubit.get(context).changeFavoriteProduct(
                           productId: model.id,
                         );
                       },
                       icon: CircleAvatar(
                         backgroundColor:
-                            HomeCubit.get(context).favorites[model.id] == true
+                            HomeCubit.get(context).favoritesMap[model.id] ==
+                                    true
                                 ? Colors.red
                                 : defaultColor,
                         radius: 14,

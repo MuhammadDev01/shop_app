@@ -33,9 +33,17 @@ final class FavouritesChangeState extends HomeStates {}
 
 final class GetFavouritesLoadingState extends HomeStates {}
 
-final class GetFavouritesSuccessState extends HomeStates {}
+final class GetFavouritesSuccessState extends HomeStates {
+  final GetFavouritesModel? favouritesModel;
 
-final class GetFavouritesFailureState extends HomeStates {}
+  GetFavouritesSuccessState({this.favouritesModel});
+}
+
+final class GetFavouritesFailureState extends HomeStates {
+  final String error;
+
+  GetFavouritesFailureState({required this.error});
+}
 
 final class GetProfileLoadingState extends HomeStates {}
 

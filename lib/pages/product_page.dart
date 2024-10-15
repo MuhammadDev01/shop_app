@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 import 'package:shop_app/pages/widgets/product_page_body.dart';
+import 'package:shop_app/utils/app_theme.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -20,8 +21,10 @@ class ProductPage extends StatelessWidget {
               categoriesModel: HomeCubit.get(context).categoriesModel!,
               homeModel: HomeCubit.get(context).homeModel!,
             ),
-            fallback: (context) =>
-                const Center(child: CircularProgressIndicator()),
+            fallback: (context) => const Center(
+                child: CircularProgressIndicator(
+              color: defaultColor,
+            )),
           ),
         );
       },

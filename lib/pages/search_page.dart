@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/pages/widgets/build_list_product.dart';
+import 'package:shop_app/pages/widgets/build_favorite_list_product.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/cubit/auth/auth_cubit.dart';
 import 'package:shop_app/cubit/search/search_cubit.dart';
@@ -25,9 +25,10 @@ class SearchPage extends StatelessWidget {
                   children: [
                     customTextFormField(
                       prefixIcon: const Icon(Icons.search),
-                      borderColor: AuthCubit.get(context).currentTheme == ThemeMode.dark
-                          ? Colors.white
-                          : Colors.black,
+                      borderColor:
+                          AuthCubit.get(context).currentTheme == ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
                       textInputType: TextInputType.text,
                       hintText: 'search a product',
                       onSubmitted: (String text) {
@@ -48,7 +49,9 @@ class SearchPage extends StatelessWidget {
                       Expanded(
                         child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) => buildListProducts(
+                          itemBuilder: (context, index) =>
+                              buildFavoritesListProducts(
+                            index: index,
                             context: context,
                             model: state.searchModel!.data.dataData[index],
                             oldPrice: false,
