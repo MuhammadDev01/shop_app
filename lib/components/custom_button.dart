@@ -4,6 +4,7 @@ Widget customButton({
   final VoidCallback? onTap,
   required String textbutton,
   required Color color,
+  required BuildContext context,
   Color colorText = Colors.white,
 }) {
   return GestureDetector(
@@ -14,15 +15,13 @@ Widget customButton({
         color: color,
         borderRadius: BorderRadius.circular(4),
       ),
-      width: 400,
-      height: 50,
+      height: 60,
+      width: 500,
       child: Text(
         textbutton.toUpperCase(),
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-          color: colorText,
-        ),
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          color: Colors.white,
+        )
       ),
     ),
   );

@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) => FittedBox(
         fit: BoxFit.scaleDown,
         child: customButton(
+          context: context,
           onTap: () {
             if (formKey.currentState!.validate()) {
               AuthCubit.get(context).userLogin(

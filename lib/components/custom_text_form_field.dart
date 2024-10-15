@@ -14,7 +14,7 @@ Widget customTextFormField({
   required TextInputType textInputType,
 }) =>
     SizedBox(
-      width: 400,
+      width: 500,
       child: TextFormField(
         style: const TextStyle(
           fontWeight: FontWeight.bold,

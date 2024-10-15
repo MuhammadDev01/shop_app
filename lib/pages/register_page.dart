@@ -87,6 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context) => FittedBox(
         fit: BoxFit.scaleDown,
         child: customButton(
+          context: context,
           onTap: () {
             if (formKey.currentState!.validate()) {
               AuthCubit.get(context).userRegister(
