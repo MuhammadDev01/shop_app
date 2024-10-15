@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/cubit/home/home_cubit.dart';
 import 'package:shop_app/models/home_model.dart';
-import 'package:shop_app/utils/app_style.dart';
 import 'package:shop_app/utils/app_theme.dart';
 
 Widget buildGridProduct(ProductModel model, BuildContext context) => Container(

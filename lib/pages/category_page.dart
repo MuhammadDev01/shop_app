@@ -11,51 +11,47 @@ class CategoryPage extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Scaffold(
-          body: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildCategoryItem(
-              context,
-              HomeCubit.get(context).categoriesModel!.data.dataData[index],
-            ),
-            separatorBuilder: (context, index) => Container(
-              height: 1,
-              color: Colors.grey[300],
-            ),
-            itemCount:
-                HomeCubit.get(context).categoriesModel!.data.dataData.length,
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          itemBuilder: (context, index) => buildCategoryItem(
+            context,
+            HomeCubit.get(context).categoriesModel!.data.dataData[index],
           ),
+          separatorBuilder: (context, index) => Container(
+            height: 1,
+            color: Colors.grey[300],
+          ),
+          itemCount:
+              HomeCubit.get(context).categoriesModel!.data.dataData.length,
         );
       },
     );
   }
 
-  Widget buildCategoryItem(context,DataDataModel model) => Padding(
-        padding: const EdgeInsets.all(20.0),
+  Widget buildCategoryItem(context, DataDataModel model) => InkWell(
+        onTap: () {},
         child: Row(
           children: [
             Image.network(
               model.image,
-              height: 140,
-              width: 140,
+              height: 150,
+              width: 150,
             ),
             const SizedBox(
-              width: 30,
+              width: 10,
             ),
-             Text(
-              model.name,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                model.name,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Colors.black,
+                    ),
               ),
             ),
-            const Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                size: 36,
-              ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 24,
             ),
           ],
         ),
