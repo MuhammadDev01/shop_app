@@ -4,6 +4,7 @@ import 'package:shop_app/pages/widgets/build_favorite_list_product.dart';
 import 'package:shop_app/components/custom_text_form_field.dart';
 import 'package:shop_app/cubit/auth/auth_cubit.dart';
 import 'package:shop_app/cubit/search/search_cubit.dart';
+import 'package:shop_app/utils/app_theme.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
@@ -16,14 +17,28 @@ class SearchPage extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: Text(
+                'Search',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                ),
+              ),
+            ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
                 key: formKey,
                 child: Column(
                   children: [
-                    customTextFormField(
+                    CustomTextFormField(
                       prefixIcon: const Icon(Icons.search),
                       borderColor:
                           AuthCubit.get(context).currentTheme == ThemeMode.dark
@@ -37,11 +52,8 @@ class SearchPage extends StatelessWidget {
                         }
                       },
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
                     if (state is SearchLoadingState)
-                      const LinearProgressIndicator(),
+                      const LinearProgressIndicator(color: defaultColor,),
                     const SizedBox(
                       height: 15,
                     ),

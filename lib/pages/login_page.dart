@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginFields(BuildContext context) {
     return Column(
       children: [
-        customTextFormField(
+        CustomTextFormField(
           controller: emailController,
           label: const Text('Email Address'),
           prefixIcon: const Icon(Icons.email_outlined),
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(
           height: 10,
         ),
-        customTextFormField(
+        CustomTextFormField(
           controller: passwordController,
           onSubmitted: (p0) {
             if (formKey.currentState!.validate()) {

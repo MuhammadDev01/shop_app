@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
 
-Widget customTextFormField({
-  TextEditingController? controller,
-  String? hintText,
-  Widget? label,
-  void Function(String)? onSubmitted,
-  required Icon prefixIcon,
-  IconButton? suffixIcon,
-  bool obscureText = false,
-  void Function(String)? onChange,
-  required Color borderColor,
-  void Function(String?)? onSaved,
-  required TextInputType textInputType,
-}) =>
-    SizedBox(
+class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
+    super.key,
+    this.controller,
+    this.hintText,
+    this.label,
+    this.context,
+    this.onSubmitted,
+    required this.prefixIcon,
+    this.suffixIcon,
+    this.onChange,
+    required this.borderColor,
+    this.onSaved,
+    required this.textInputType,
+    this.obscureText = false,
+  });
+  final TextEditingController? controller;
+  final String? hintText;
+  final Widget? label;
+  final BuildContext? context;
+  final void Function(String)? onSubmitted;
+  final Icon prefixIcon;
+  final IconButton? suffixIcon;
+  final bool obscureText;
+  final void Function(String)? onChange;
+  final Color borderColor;
+  final void Function(String?)? onSaved;
+  final TextInputType textInputType;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
       width: 500,
       child: TextFormField(
         style: const TextStyle(
@@ -34,7 +51,9 @@ Widget customTextFormField({
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           contentPadding: EdgeInsets.zero,
+          prefixIconColor: Colors.grey,
           label: label,
+          hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),
           hintText: hintText,
           suffixIcon: suffixIcon,
           focusColor: Colors.cyan,
@@ -56,3 +75,5 @@ Widget customTextFormField({
         ),
       ),
     );
+  }
+}

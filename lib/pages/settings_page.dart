@@ -60,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    customTextFormField(
+                    CustomTextFormField(
                       prefixIcon: const Icon(Icons.person),
                       borderColor:
                           AuthCubit.get(context).currentTheme == ThemeMode.dark
@@ -73,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    customTextFormField(
+                    CustomTextFormField(
                       prefixIcon: const Icon(Icons.email),
                       borderColor:
                           AuthCubit.get(context).currentTheme == ThemeMode.dark
@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    customTextFormField(
+                    CustomTextFormField(
                       prefixIcon: const Icon(Icons.phone),
                       borderColor:
                           AuthCubit.get(context).currentTheme == ThemeMode.dark

@@ -118,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _registerFields(BuildContext context) {
     return Column(
       children: [
-        customTextFormField(
+        CustomTextFormField(
           controller: emailController,
           label: const Text('Email Address'),
           prefixIcon: const Icon(Icons.email_outlined),
@@ -130,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
         const SizedBox(
           height: 10,
         ),
-        customTextFormField(
+        CustomTextFormField(
           controller: passwordController,
           label: const Text('password'),
           prefixIcon: const Icon(Icons.lock_outline),
@@ -151,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
         const SizedBox(
           height: 10,
         ),
-        customTextFormField(
+        CustomTextFormField(
           controller: nameController,
           label: const Text('Name'),
           prefixIcon: const Icon(Icons.person),
@@ -163,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
         const SizedBox(
           height: 10,
         ),
-        customTextFormField(
+        CustomTextFormField(
           controller: phoneController,
           label: const Text('Phone'),
           prefixIcon: const Icon(Icons.phone),
