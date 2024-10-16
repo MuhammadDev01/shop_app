@@ -4,7 +4,7 @@
 
 
     <application
-        android:label="shop_app"
+        android:label="Shopify"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
