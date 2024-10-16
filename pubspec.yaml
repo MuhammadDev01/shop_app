@@ -46,7 +46,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 icons_launcher:
-  image_path: "assets/images/shopify logo.jpg"
+  image_path: "assets/images/logo.png"
   platforms:
     android:
       enable: true
